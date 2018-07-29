@@ -41,6 +41,7 @@ import type TouchZoomRotateHandler from './handler/touch_zoom_rotate';
 import type {TaskID} from '../util/task_queue';
 
 type ControlPosition = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
+type Projection = 'EPSG:3857' | 'EPSG:4490';
 
 /* eslint-disable no-use-before-define */
 type IControl = {
@@ -81,7 +82,8 @@ type MapOptions = {
     pitch?: number,
     renderWorldCopies?: boolean,
     maxTileCacheSize?: number,
-    transformRequest?: RequestTransformFunction
+    transformRequest?: RequestTransformFunction,
+    projection?: Projection
 };
 
 const defaultMinZoom = 0;
@@ -124,7 +126,9 @@ const defaultOptions = {
 
     transformRequest: null,
     fadeDuration: 300,
-    crossSourceCollisions: true
+    crossSourceCollisions: true,
+
+    projection: 'EPSG:3857'
 };
 
 /**
@@ -298,7 +302,11 @@ class Map extends Camera {
             throw new Error(`maxZoom must be greater than minZoom`);
         }
 
-        const transform = new Transform(options.minZoom, options.maxZoom, options.renderWorldCopies);
+        if (['EPSG:3857', 'EPSG:4490'].indexOf(options.projection) === -1) {
+            throw new Error('Projection only supports EPSG:3857 or EPSG:4490.');
+        }
+
+        const transform = new Transform(options.minZoom, options.maxZoom, options.renderWorldCopies, options.projection);
         super(transform, options);
 
         this._interactive = options.interactive;
@@ -960,7 +968,8 @@ class Map extends Camera {
      * @see [Highlight features containing similar data](https://www.mapbox.com/mapbox-gl-js/example/query-similar-features/)
      */
     querySourceFeatures(sourceID: string, parameters: ?{sourceLayer: ?string, filter: ?Array<any>}) {
-        return this.style.querySourceFeatures(sourceID, parameters);
+        const options = extend({ projection: this.transform.projection }, parameters);
+        return this.style.querySourceFeatures(sourceID, options);
     }
 
     /**
@@ -1053,6 +1062,9 @@ class Map extends Camera {
      * @see [Set a point after Geocoder result](https://www.mapbox.com/mapbox-gl-js/example/point-from-geocoder-result/)
      */
     addSource(id: string, source: SourceSpecification) {
+        if (source.type === 'geojson' && this.transform.projection !== 'EPSG:3857') {
+            source.projection = this.transform.projection;
+        }
         this.style.addSource(id, source);
         this._update(true);
         return this;

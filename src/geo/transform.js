@@ -11,6 +11,8 @@ import { CanonicalTileID, UnwrappedTileID } from '../source/tile_id';
 import EXTENT from '../data/extent';
 import { vec4, mat4, mat2 } from 'gl-matrix';
 
+type Projection = 'EPSG:3857' | 'EPSG:4490';
+
 /**
  * A single transform, generally used for a single tile to be
  * scaled, rotated, and zoomed.
@@ -33,6 +35,7 @@ class Transform {
     alignedProjMatrix: Float64Array;
     pixelMatrix: Float64Array;
     pixelMatrixInverse: Float64Array;
+    projection: Projection;
     _fov: number;
     _pitch: number;
     _zoom: number;
@@ -45,14 +48,15 @@ class Transform {
     _posMatrixCache: {[number]: Float32Array};
     _alignedPosMatrixCache: {[number]: Float32Array};
 
-    constructor(minZoom: ?number, maxZoom: ?number, renderWorldCopies: boolean | void) {
+    constructor(minZoom: ?number, maxZoom: ?number, renderWorldCopies: boolean | void, projection: ?Projection) {
         this.tileSize = 512; // constant
 
         this._renderWorldCopies = renderWorldCopies === undefined ? true : renderWorldCopies;
         this._minZoom = minZoom || 0;
         this._maxZoom = maxZoom || 22;
+        this.projection = projection || 'EPSG:3857';
 
-        this.latRange = [-85.05113, 85.05113];
+        this.latRange = this.projection === 'EPSG:4490' ? [-90, 90] : [-85.05113, 85.05113];
 
         this.width = 0;
         this.height = 0;
@@ -295,6 +299,11 @@ class Transform {
      * @returns {number} pixel coordinate
      */
     latY(lat: number) {
+        if (this.projection === 'EPSG:4490') {
+            return (90 - lat) * this.worldSize / 360;
+        }
+
+        // EPSG:3857
         const y = 180 / Math.PI * Math.log(Math.tan(Math.PI / 4 + lat * Math.PI / 360));
         return (180 - y) * this.worldSize / 360;
     }
@@ -303,6 +312,11 @@ class Transform {
         return x * 360 / this.worldSize - 180;
     }
     yLat(y: number) {
+        if (this.projection === 'EPSG:4490') {
+            return 90 - y * 360 / this.worldSize;
+        }
+
+        // EPSG:3857
         const y2 = 180 - y * 360 / this.worldSize;
         return 360 / Math.PI * Math.atan(Math.exp(y2 * Math.PI / 180)) - 90;
     }

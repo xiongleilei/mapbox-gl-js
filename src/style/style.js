@@ -203,6 +203,10 @@ class Style extends Evented {
         this.stylesheet = json;
 
         for (const id in json.sources) {
+            if (json.sources[id].type === 'geojson' &&
+                this.map.transform.projection !== 'EPSG:3857') {
+                json.sources[id].projection = this.map.transform.projection;
+            }
             this.addSource(id, json.sources[id], {validate: false});
         }
 
@@ -909,7 +913,7 @@ class Style extends Evented {
         return this._flattenRenderedFeatures(sourceResults);
     }
 
-    querySourceFeatures(sourceID: string, params: ?{sourceLayer: ?string, filter: ?Array<any>}) {
+    querySourceFeatures(sourceID: string, params: ?{sourceLayer: ?string, filter: ?Array<any>, projection: ?string}) {
         if (params && params.filter) {
             this._validate(validateStyle.filter, 'querySourceFeatures.filter', params.filter);
         }

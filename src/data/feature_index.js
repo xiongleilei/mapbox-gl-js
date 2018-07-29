@@ -7,7 +7,7 @@ import EXTENT from './extent';
 import featureFilter from '../style-spec/feature_filter';
 import Grid from 'grid-index';
 import DictionaryCoder from '../util/dictionary_coder';
-import vt from '@mapbox/vector-tile';
+import vt from '@jingsam/vector-tile';
 import Protobuf from 'pbf';
 import GeoJSONFeature from '../util/vectortile_to_geojson';
 import { arraysIntersect } from '../util/util';
@@ -103,6 +103,7 @@ class FeatureIndex {
 
         const queryGeometry = args.queryGeometry;
         const queryPadding = args.queryPadding * pixelsToTileUnits;
+        const projection = args.transform.projection;
 
         let minX = Infinity;
         let minY = Infinity;
@@ -150,7 +151,8 @@ class FeatureIndex {
                         featureState = sourceFeatureState.getState(styleLayer.sourceLayer || '_geojsonTileLayer', String(feature.id));
                     }
                     return styleLayer.queryIntersectsFeature(queryGeometry, feature, featureState, featureGeometry, this.z, args.transform, pixelsToTileUnits, args.posMatrix);
-                }
+                },
+                projection
             );
         }
 
@@ -165,7 +167,9 @@ class FeatureIndex {
         filter: FeatureFilter,
         filterLayerIDs: Array<string>,
         styleLayers: {[string]: StyleLayer},
-        intersectionTest?: (feature: VectorTileFeature, styleLayer: StyleLayer) => boolean) {
+        intersectionTest?: (feature: VectorTileFeature, styleLayer: StyleLayer) => boolean,
+        projection: ?string
+    ) {
 
         const layerIDs = this.bucketLayerIDs[bucketIndex];
         if (filterLayerIDs && !arraysIntersect(filterLayerIDs, layerIDs))
@@ -193,7 +197,7 @@ class FeatureIndex {
                 continue;
             }
 
-            const geojsonFeature = new GeoJSONFeature(feature, this.z, this.x, this.y);
+            const geojsonFeature = new GeoJSONFeature(feature, this.z, this.x, this.y, projection);
             (geojsonFeature: any).layer = styleLayer.serialize();
             let layerResult = result[layerID];
             if (layerResult === undefined) {

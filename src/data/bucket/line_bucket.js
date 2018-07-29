@@ -8,7 +8,7 @@ import { ProgramConfigurationSet } from '../program_configuration';
 import { TriangleIndexArray } from '../index_array_type';
 import loadGeometry from '../load_geometry';
 import EXTENT from '../extent';
-import mvt from '@mapbox/vector-tile';
+import mvt from '@jingsam/vector-tile';
 const vectorTileFeatureTypes = mvt.VectorTileFeature.types;
 import { register } from '../../util/web_worker_transfer';
 import EvaluationParameters from '../../style/evaluation_parameters';

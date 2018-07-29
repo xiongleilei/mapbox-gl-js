@@ -137,6 +137,11 @@ class GeoJSONSource extends Evented implements Source {
                 log: false
             }
         }, options.workerOptions);
+
+        if (options.projection) {
+            this.workerOptions.geojsonVtOptions.projection = options.projection;
+            this.workerOptions.superclusterOptions.projection = options.projection;
+        }
     }
 
     load() {

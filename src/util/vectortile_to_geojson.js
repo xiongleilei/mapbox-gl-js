@@ -8,13 +8,14 @@ class Feature {
 
     _vectorTileFeature: VectorTileFeature;
 
-    constructor(vectorTileFeature: VectorTileFeature, z: number, x: number, y: number) {
+    constructor(vectorTileFeature: VectorTileFeature, z: number, x: number, y: number, projection: ?string) {
         this.type = 'Feature';
 
         this._vectorTileFeature = vectorTileFeature;
         (vectorTileFeature: any)._z = z;
         (vectorTileFeature: any)._x = x;
         (vectorTileFeature: any)._y = y;
+        (vectorTileFeature: any)._projection = projection;
 
         this.properties = vectorTileFeature.properties;
 
@@ -28,7 +29,8 @@ class Feature {
             this._geometry = this._vectorTileFeature.toGeoJSON(
                 (this._vectorTileFeature: any)._x,
                 (this._vectorTileFeature: any)._y,
-                (this._vectorTileFeature: any)._z).geometry;
+                (this._vectorTileFeature: any)._z,
+                (this._vectorTileFeature: any)._projection).geometry;
         }
         return this._geometry;
     }

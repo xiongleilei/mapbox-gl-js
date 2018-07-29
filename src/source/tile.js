@@ -270,6 +270,7 @@ class Tile {
 
         const sourceLayer = params ? params.sourceLayer : '';
         const layer = vtLayers._geojsonTileLayer || vtLayers[sourceLayer];
+        const projection = params && params.projection;
 
         if (!layer) return;
 
@@ -279,7 +280,7 @@ class Tile {
         for (let i = 0; i < layer.length; i++) {
             const feature = layer.feature(i);
             if (filter(new EvaluationParameters(this.tileID.overscaledZ), feature)) {
-                const geojsonFeature = new GeoJSONFeature(feature, coord.z, coord.x, coord.y);
+                const geojsonFeature = new GeoJSONFeature(feature, coord.z, coord.x, coord.y, projection);
                 (geojsonFeature: any).tile = coord;
                 result.push(geojsonFeature);
             }

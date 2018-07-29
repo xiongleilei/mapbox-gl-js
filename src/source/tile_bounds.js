@@ -10,11 +10,13 @@ class TileBounds {
     bounds: LngLatBounds;
     minzoom: number;
     maxzoom: number;
+    _projection: string
 
-    constructor(bounds: [number, number, number, number], minzoom: ?number, maxzoom: ?number) {
+    constructor(bounds: [number, number, number, number], minzoom: ?number, maxzoom: ?number, projection: ?string) {
         this.bounds = LngLatBounds.convert(this.validateBounds(bounds));
         this.minzoom = minzoom || 0;
         this.maxzoom = maxzoom || 24;
+        this._projection = projection || 'EPSG:3857';
     }
 
     validateBounds(bounds: [number, number, number, number]) {
@@ -39,6 +41,11 @@ class TileBounds {
     }
 
     latY(lat: number, zoom: number) {
+        if (this._projection === 'EPSG:4490') {
+            return (90 - lat) * (Math.pow(2, zoom) / 360);
+        }
+
+        // EPSG:3857
         const f = clamp(Math.sin(Math.PI / 180 * lat), -0.9999, 0.9999);
         const scale = Math.pow(2, zoom) / (2 * Math.PI);
         return Math.pow(2, zoom - 1) + 0.5 * Math.log((1 + f) / (1 - f)) * -scale;

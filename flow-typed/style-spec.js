@@ -116,7 +116,8 @@ declare type GeojsonSourceSpecification = {|
     "cluster"?: boolean,
     "clusterRadius"?: number,
     "clusterMaxZoom"?: number,
-    "lineMetrics"?: boolean
+    "lineMetrics"?: boolean,
+    "projection"?: "EPSG:3857" | "EPSG:4490"
 |}
 
 declare type VideoSourceSpecification = {|

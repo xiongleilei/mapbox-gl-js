@@ -28,7 +28,8 @@ export class CanonicalTileID {
 
     // given a list of urls, choose a url template and return a tile URL
     url(urls: Array<string>, scheme: ?string) {
-        const bbox = getTileBBox(this.x, this.y, this.z);
+        const bbox3857 = getTileBBox(this.x, this.y, this.z);
+        const bbox4490 = getBBox4490(this.x, this.y, this.z);
         const quadkey = getQuadkey(this.z, this.x, this.y);
 
         return urls[(this.x + this.y) % urls.length]
@@ -37,7 +38,8 @@ export class CanonicalTileID {
             .replace('{x}', String(this.x))
             .replace('{y}', String(scheme === 'tms' ? (Math.pow(2, this.z) - this.y - 1) : this.y))
             .replace('{quadkey}', quadkey)
-            .replace('{bbox-epsg-3857}', bbox);
+            .replace('{bbox-epsg-3857}', bbox3857)
+            .replace('{bbox-epsg-4490}', bbox4490);
     }
 }
 
@@ -162,6 +164,17 @@ function getQuadkey(z, x, y) {
         quadkey += ((x & mask ? 1 : 0) + (y & mask ? 2 : 0));
     }
     return quadkey;
+}
+
+function getBBox4490(z, x, y) {
+    const scale = 360 / Math.pow(2, z);
+
+    const minX = x * scale - 180;
+    const minY = 90 - y * scale;
+    const maxX = (x + 1) * scale - 180;
+    const maxY = 90 - (y + 1) * scale;
+
+    return [minX, minY, maxX, maxY].join(',');
 }
 
 register('CanonicalTileID', CanonicalTileID);

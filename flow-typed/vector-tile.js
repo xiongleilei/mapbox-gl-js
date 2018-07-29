@@ -19,7 +19,7 @@ declare interface VectorTileFeature {
     properties: {[string]: string | number | boolean};
 
     loadGeometry(): Array<Array<Point>>;
-    toGeoJSON(x: number, y: number, z: number): GeoJSONFeature;
+    toGeoJSON(x: number, y: number, z: number, projection: ?string): GeoJSONFeature;
 }
 
 declare module "@mapbox/vector-tile" {
