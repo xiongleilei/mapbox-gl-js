@@ -150,6 +150,19 @@
       ],
       "doc": "An array containing the longitude and latitude of the southwest and northeast corners of the source's bounding box in the following order: `[sw.lng, sw.lat, ne.lng, ne.lat]`. When this property is included in a source, no tiles outside of the given bounds are requested by Mapbox GL."
     },
+    "scheme": {
+      "type": "enum",
+      "values": {
+        "xyz": {
+          "doc": "Slippy map tilenames scheme."
+        },
+        "tms": {
+          "doc": "OSGeo spec scheme."
+        }
+      },
+      "default": "xyz",
+      "doc": "Influences the y direction of the tile coordinates. The global-mercator (aka Spherical Mercator) profile is assumed."
+    },
     "minzoom": {
       "type": "number",
       "default": 0,
@@ -576,7 +589,7 @@
     },
     "filter": {
       "type": "filter",
-      "doc": "A expression specifying conditions on source features. Only features that match the filter are displayed."
+      "doc": "A expression specifying conditions on source features. Only features that match the filter are displayed. The `feature-state` expression is not supported in filter expressions."
     },
     "layout": {
       "type": "layout",
@@ -874,6 +887,9 @@
         },
         "line": {
           "doc": "The label is placed along the line of the geometry. Can only be used on `LineString` and `Polygon` geometries."
+        },
+        "line-center": {
+          "doc": "The label is placed at the center of the line of the geometry. Can only be used on `LineString` and `Polygon` geometries. Note that a single feature in a vector tile may contain multiple line geometries."
         }
       },
       "default": "point",
@@ -884,6 +900,9 @@
           "android": "2.0.1",
           "ios": "2.0.0",
           "macos": "0.1.0"
+        },
+        "`line-center` value": {
+          "js": "0.47.0"
         },
         "data-driven styling": {}
       },
@@ -1021,13 +1040,13 @@
       "type": "enum",
       "values": {
         "map": {
-          "doc": "When `symbol-placement` is set to `point`, aligns icons east-west. When `symbol-placement` is set to `line`, aligns icon x-axes with the line."
+          "doc": "When `symbol-placement` is set to `point`, aligns icons east-west. When `symbol-placement` is set to `line` or `line-center`, aligns icon x-axes with the line."
         },
         "viewport": {
           "doc": "Produces icons whose x-axes are aligned with the x-axis of the viewport, regardless of the value of `symbol-placement`."
         },
         "auto": {
-          "doc": "When `symbol-placement` is set to `point`, this is equivalent to `viewport`. When `symbol-placement` is set to `line`, this is equivalent to `map`."
+          "doc": "When `symbol-placement` is set to `point`, this is equivalent to `viewport`. When `symbol-placement` is set to `line` or `line-center`, this is equivalent to `map`."
         }
       },
       "default": "auto",
@@ -1264,7 +1283,10 @@
           "icon-rotation-alignment": "map"
         },
         {
-          "symbol-placement": "line"
+          "symbol-placement": [
+              "line",
+              "line-center"
+          ]
         }
       ],
       "sdk-support": {
@@ -1458,13 +1480,13 @@
       "type": "enum",
       "values": {
         "map": {
-          "doc": "When `symbol-placement` is set to `point`, aligns text east-west. When `symbol-placement` is set to `line`, aligns text x-axes with the line."
+          "doc": "When `symbol-placement` is set to `point`, aligns text east-west. When `symbol-placement` is set to `line` or `line-center`, aligns text x-axes with the line."
         },
         "viewport": {
           "doc": "Produces glyphs whose x-axes are aligned with the x-axis of the viewport, regardless of the value of `symbol-placement`."
         },
         "auto": {
-          "doc": "When `symbol-placement` is set to `point`, this is equivalent to `viewport`. When `symbol-placement` is set to `line`, this is equivalent to `map`."
+          "doc": "When `symbol-placement` is set to `point`, this is equivalent to `viewport`. When `symbol-placement` is set to `line` or `line-center`, this is equivalent to `map`."
         }
       },
       "default": "auto",
@@ -1785,7 +1807,10 @@
       "requires": [
         "text-field",
         {
-          "symbol-placement": "line"
+            "symbol-placement": [
+                "line",
+                "line-center"
+            ]
         }
       ],
       "sdk-support": {
@@ -1873,7 +1898,10 @@
           "text-rotation-alignment": "map"
         },
         {
-          "symbol-placement": "line"
+            "symbol-placement": [
+                "line",
+                "line-center"
+            ]
         }
       ],
       "sdk-support": {
@@ -3272,7 +3300,8 @@
         "interpolated": true,
         "parameters": [
           "zoom",
-          "feature"
+          "feature",
+          "feature-state"
         ]
       },
       "property-type": "data-driven"
@@ -3305,7 +3334,8 @@
         "interpolated": true,
         "parameters": [
           "zoom",
-          "feature"
+          "feature",
+          "feature-state"
         ]
       },
       "property-type": "data-driven"
@@ -3340,7 +3370,8 @@
         "interpolated": true,
         "parameters": [
           "zoom",
-          "feature"
+          "feature",
+          "feature-state"
         ]
       },
       "property-type": "data-driven"
@@ -3479,7 +3510,8 @@
         "interpolated": true,
         "parameters": [
           "zoom",
-          "feature"
+          "feature",
+          "feature-state"
         ]
       },
       "property-type": "data-driven"
@@ -3590,7 +3622,8 @@
         "interpolated": true,
         "parameters": [
           "zoom",
-          "feature"
+          "feature",
+          "feature-state"
         ]
       },
       "property-type": "data-driven"
@@ -3623,7 +3656,8 @@
         "interpolated": true,
         "parameters": [
           "zoom",
-          "feature"
+          "feature",
+          "feature-state"
         ]
       },
       "property-type": "data-driven"
@@ -3655,7 +3689,8 @@
         "interpolated": true,
         "parameters": [
           "zoom",
-          "feature"
+          "feature",
+          "feature-state"
         ]
       },
       "property-type": "data-driven"
@@ -3688,7 +3723,8 @@
         "interpolated": true,
         "parameters": [
           "zoom",
-          "feature"
+          "feature",
+          "feature-state"
         ]
       },
       "property-type": "data-driven"
@@ -3778,7 +3814,8 @@
         "interpolated": true,
         "parameters": [
           "zoom",
-          "feature"
+          "feature",
+          "feature-state"
         ]
       },
       "property-type": "data-driven"
@@ -3808,7 +3845,8 @@
         "interpolated": true,
         "parameters": [
           "zoom",
-          "feature"
+          "feature",
+          "feature-state"
         ]
       },
       "property-type": "data-driven"
@@ -3837,7 +3875,8 @@
         "interpolated": true,
         "parameters": [
           "zoom",
-          "feature"
+          "feature",
+          "feature-state"
         ]
       },
       "property-type": "data-driven"
@@ -3867,7 +3906,8 @@
         "interpolated": true,
         "parameters": [
           "zoom",
-          "feature"
+          "feature",
+          "feature-state"
         ]
       },
       "property-type": "data-driven"
@@ -3981,7 +4021,8 @@
         "interpolated": true,
         "parameters": [
           "zoom",
-          "feature"
+          "feature",
+          "feature-state"
         ]
       },
       "property-type": "data-driven"
@@ -4009,7 +4050,8 @@
         "interpolated": true,
         "parameters": [
           "zoom",
-          "feature"
+          "feature",
+          "feature-state"
         ]
       },
       "property-type": "data-driven"
@@ -4037,7 +4079,8 @@
         "interpolated": true,
         "parameters": [
           "zoom",
-          "feature"
+          "feature",
+          "feature-state"
         ]
       },
       "property-type": "data-driven"
@@ -4067,7 +4110,8 @@
         "interpolated": true,
         "parameters": [
           "zoom",
-          "feature"
+          "feature",
+          "feature-state"
         ]
       },
       "property-type": "data-driven"
@@ -4215,7 +4259,8 @@
         "interpolated": true,
         "parameters": [
           "zoom",
-          "feature"
+          "feature",
+          "feature-state"
         ]
       },
       "property-type": "data-driven"
@@ -4243,7 +4288,8 @@
         "interpolated": true,
         "parameters": [
           "zoom",
-          "feature"
+          "feature",
+          "feature-state"
         ]
       },
       "property-type": "data-driven"
@@ -4273,7 +4319,8 @@
         "interpolated": true,
         "parameters": [
           "zoom",
-          "feature"
+          "feature",
+          "feature-state"
         ]
       },
       "property-type": "data-driven"
@@ -4305,7 +4352,8 @@
         "interpolated": true,
         "parameters": [
           "zoom",
-          "feature"
+          "feature",
+          "feature-state"
         ]
       },
       "property-type": "data-driven"
@@ -4334,7 +4382,8 @@
         "interpolated": true,
         "parameters": [
           "zoom",
-          "feature"
+          "feature",
+          "feature-state"
         ]
       },
       "property-type": "data-driven"
@@ -4458,7 +4507,8 @@
         "interpolated": true,
         "parameters": [
           "zoom",
-          "feature"
+          "feature",
+          "feature-state"
         ]
       },
       "property-type": "data-driven"
@@ -4489,7 +4539,8 @@
         "interpolated": true,
         "parameters": [
           "zoom",
-          "feature"
+          "feature",
+          "feature-state"
         ]
       },
       "property-type": "data-driven"
@@ -4520,7 +4571,8 @@
         "interpolated": true,
         "parameters": [
           "zoom",
-          "feature"
+          "feature",
+          "feature-state"
         ]
       },
       "property-type": "data-driven"
@@ -4553,7 +4605,8 @@
         "interpolated": true,
         "parameters": [
           "zoom",
-          "feature"
+          "feature",
+          "feature-state"
         ]
       },
       "property-type": "data-driven"
@@ -4586,7 +4639,8 @@
         "interpolated": true,
         "parameters": [
           "zoom",
-          "feature"
+          "feature",
+          "feature-state"
         ]
       },
       "property-type": "data-driven"
@@ -4683,7 +4737,8 @@
         "interpolated": true,
         "parameters": [
           "zoom",
-          "feature"
+          "feature",
+          "feature-state"
         ]
       },
       "property-type": "data-driven"
@@ -4714,7 +4769,8 @@
         "interpolated": true,
         "parameters": [
           "zoom",
-          "feature"
+          "feature",
+          "feature-state"
         ]
       },
       "property-type": "data-driven"
@@ -4745,7 +4801,8 @@
         "interpolated": true,
         "parameters": [
           "zoom",
-          "feature"
+          "feature",
+          "feature-state"
         ]
       },
       "property-type": "data-driven"
@@ -4778,7 +4835,8 @@
         "interpolated": true,
         "parameters": [
           "zoom",
-          "feature"
+          "feature",
+          "feature-state"
         ]
       },
       "property-type": "data-driven"
@@ -4811,7 +4869,8 @@
         "interpolated": true,
         "parameters": [
           "zoom",
-          "feature"
+          "feature",
+          "feature-state"
         ]
       },
       "property-type": "data-driven"
@@ -5020,6 +5079,32 @@
       },
       "expression": {
         "interpolated": true,
+        "parameters": [
+          "zoom"
+        ]
+      },
+      "property-type": "data-constant"
+    },
+    "raster-resampling": {
+      "type": "enum",
+      "doc": "The resampling/interpolation method to use for overscaling, also known as texture magnification filter",
+      "values": {
+        "linear": {
+          "doc": "(Bi)linear filtering interpolates pixel values using the weighted average of the four closest original source pixels creating a smooth but blurry look when overscaled"
+        },
+        "nearest": {
+          "doc": "Nearest neighbor filtering interpolates pixel values using the nearest original source pixel creating a sharp but pixelated look when overscaled"
+        }
+      },
+      "default": "linear",
+      "sdk-support": {
+        "basic functionality": {
+          "js": "0.47.0"
+        },
+        "data-driven styling": {}
+      },
+      "expression": {
+        "interpolated": false,
         "parameters": [
           "zoom"
         ]
