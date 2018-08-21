@@ -1,8 +1,12 @@
+// @flow
 // Generated code; do not edit. Edit build/generate-flow-typed-style-spec.js instead.
+/* eslint-disable */
 
-declare type ColorSpecification = string;
+export type ColorSpecification = string;
 
-declare type FilterSpecification =
+export type FormattedSpecification = string;
+
+export type FilterSpecification =
     | ['has', string]
     | ['!has', string]
     | ['==', string, string | number | boolean]
@@ -13,43 +17,43 @@ declare type FilterSpecification =
     | ['<=', string, string | number | boolean]
     | Array<string | FilterSpecification>; // Can't type in, !in, all, any, none -- https://github.com/facebook/flow/issues/2443
 
-declare type TransitionSpecification = {
+export type TransitionSpecification = {
     duration?: number,
     delay?: number
 };
 
 // Note: doesn't capture interpolatable vs. non-interpolatable types.
 
-declare type CameraFunctionSpecification<T> =
+export type CameraFunctionSpecification<T> =
     | {| type: 'exponential', stops: Array<[number, T]> |}
     | {| type: 'interval',    stops: Array<[number, T]> |};
 
-declare type SourceFunctionSpecification<T> =
+export type SourceFunctionSpecification<T> =
     | {| type: 'exponential', stops: Array<[number, T]>, property: string, default?: T |}
     | {| type: 'interval',    stops: Array<[number, T]>, property: string, default?: T |}
     | {| type: 'categorical', stops: Array<[string | number | boolean, T]>, property: string, default?: T |}
     | {| type: 'identity', property: string, default?: T |};
 
-declare type CompositeFunctionSpecification<T> =
+export type CompositeFunctionSpecification<T> =
     | {| type: 'exponential', stops: Array<[{zoom: number, value: number}, T]>, property: string, default?: T |}
     | {| type: 'interval',    stops: Array<[{zoom: number, value: number}, T]>, property: string, default?: T |}
     | {| type: 'categorical', stops: Array<[{zoom: number, value: string | number | boolean}, T]>, property: string, default?: T |};
 
-declare type ExpressionSpecification = Array<mixed>;
+export type ExpressionSpecification = Array<mixed>;
 
-declare type PropertyValueSpecification<T> =
+export type PropertyValueSpecification<T> =
     | T
     | CameraFunctionSpecification<T>
     | ExpressionSpecification;
 
-declare type DataDrivenPropertyValueSpecification<T> =
+export type DataDrivenPropertyValueSpecification<T> =
     | T
     | CameraFunctionSpecification<T>
     | SourceFunctionSpecification<T>
     | CompositeFunctionSpecification<T>
     | ExpressionSpecification;
 
-declare type StyleSpecification = {|
+export type StyleSpecification = {|
     "version": 8,
     "name"?: string,
     "metadata"?: mixed,
@@ -65,14 +69,14 @@ declare type StyleSpecification = {|
     "layers": Array<LayerSpecification>
 |}
 
-declare type LightSpecification = {|
+export type LightSpecification = {|
     "anchor"?: PropertyValueSpecification<"map" | "viewport">,
     "position"?: PropertyValueSpecification<[number, number, number]>,
     "color"?: PropertyValueSpecification<ColorSpecification>,
     "intensity"?: PropertyValueSpecification<number>
 |}
 
-declare type VectorSourceSpecification = {
+export type VectorSourceSpecification = {
     "type": "vector",
     "url"?: string,
     "tiles"?: Array<string>,
@@ -83,7 +87,7 @@ declare type VectorSourceSpecification = {
     "attribution"?: string
 }
 
-declare type RasterSourceSpecification = {
+export type RasterSourceSpecification = {
     "type": "raster",
     "url"?: string,
     "tiles"?: Array<string>,
@@ -95,7 +99,7 @@ declare type RasterSourceSpecification = {
     "attribution"?: string
 }
 
-declare type RasterDEMSourceSpecification = {
+export type RasterDEMSourceSpecification = {
     "type": "raster-dem",
     "url"?: string,
     "tiles"?: Array<string>,
@@ -107,7 +111,7 @@ declare type RasterDEMSourceSpecification = {
     "encoding"?: "terrarium" | "mapbox"
 }
 
-declare type GeojsonSourceSpecification = {|
+export type GeoJSONSourceSpecification = {|
     "type": "geojson",
     "data"?: mixed,
     "maxzoom"?: number,
@@ -118,30 +122,31 @@ declare type GeojsonSourceSpecification = {|
     "clusterRadius"?: number,
     "clusterMaxZoom"?: number,
     "lineMetrics"?: boolean,
+    "generateId"?: boolean,
     "projection"?: "EPSG:3857" | "EPSG:4490"
 |}
 
-declare type VideoSourceSpecification = {|
+export type VideoSourceSpecification = {|
     "type": "video",
     "urls": Array<string>,
     "coordinates": [[number, number], [number, number], [number, number], [number, number]]
 |}
 
-declare type ImageSourceSpecification = {|
+export type ImageSourceSpecification = {|
     "type": "image",
     "url": string,
     "coordinates": [[number, number], [number, number], [number, number], [number, number]]
 |}
 
-declare type SourceSpecification =
+export type SourceSpecification =
     | VectorSourceSpecification
     | RasterSourceSpecification
     | RasterDEMSourceSpecification
-    | GeojsonSourceSpecification
+    | GeoJSONSourceSpecification
     | VideoSourceSpecification
     | ImageSourceSpecification
 
-declare type FillLayerSpecification = {|
+export type FillLayerSpecification = {|
     "id": string,
     "type": "fill",
     "metadata"?: mixed,
@@ -164,7 +169,7 @@ declare type FillLayerSpecification = {|
     |}
 |}
 
-declare type LineLayerSpecification = {|
+export type LineLayerSpecification = {|
     "id": string,
     "type": "line",
     "metadata"?: mixed,
@@ -195,7 +200,7 @@ declare type LineLayerSpecification = {|
     |}
 |}
 
-declare type SymbolLayerSpecification = {|
+export type SymbolLayerSpecification = {|
     "id": string,
     "type": "symbol",
     "metadata"?: mixed,
@@ -224,7 +229,7 @@ declare type SymbolLayerSpecification = {|
         "icon-pitch-alignment"?: PropertyValueSpecification<"map" | "viewport" | "auto">,
         "text-pitch-alignment"?: PropertyValueSpecification<"map" | "viewport" | "auto">,
         "text-rotation-alignment"?: PropertyValueSpecification<"map" | "viewport" | "auto">,
-        "text-field"?: DataDrivenPropertyValueSpecification<string>,
+        "text-field"?: DataDrivenPropertyValueSpecification<FormattedSpecification>,
         "text-font"?: DataDrivenPropertyValueSpecification<Array<string>>,
         "text-size"?: DataDrivenPropertyValueSpecification<number>,
         "text-max-width"?: DataDrivenPropertyValueSpecification<number>,
@@ -261,7 +266,7 @@ declare type SymbolLayerSpecification = {|
     |}
 |}
 
-declare type CircleLayerSpecification = {|
+export type CircleLayerSpecification = {|
     "id": string,
     "type": "circle",
     "metadata"?: mixed,
@@ -288,7 +293,7 @@ declare type CircleLayerSpecification = {|
     |}
 |}
 
-declare type HeatmapLayerSpecification = {|
+export type HeatmapLayerSpecification = {|
     "id": string,
     "type": "heatmap",
     "metadata"?: mixed,
@@ -309,7 +314,7 @@ declare type HeatmapLayerSpecification = {|
     |}
 |}
 
-declare type FillExtrusionLayerSpecification = {|
+export type FillExtrusionLayerSpecification = {|
     "id": string,
     "type": "fill-extrusion",
     "metadata"?: mixed,
@@ -332,7 +337,7 @@ declare type FillExtrusionLayerSpecification = {|
     |}
 |}
 
-declare type RasterLayerSpecification = {|
+export type RasterLayerSpecification = {|
     "id": string,
     "type": "raster",
     "metadata"?: mixed,
@@ -356,7 +361,7 @@ declare type RasterLayerSpecification = {|
     |}
 |}
 
-declare type HillshadeLayerSpecification = {|
+export type HillshadeLayerSpecification = {|
     "id": string,
     "type": "hillshade",
     "metadata"?: mixed,
@@ -378,7 +383,7 @@ declare type HillshadeLayerSpecification = {|
     |}
 |}
 
-declare type BackgroundLayerSpecification = {|
+export type BackgroundLayerSpecification = {|
     "id": string,
     "type": "background",
     "metadata"?: mixed,
@@ -394,7 +399,7 @@ declare type BackgroundLayerSpecification = {|
     |}
 |}
 
-declare type LayerSpecification =
+export type LayerSpecification =
     | FillLayerSpecification
     | LineLayerSpecification
     | SymbolLayerSpecification
