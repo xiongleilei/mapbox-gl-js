@@ -180,7 +180,7 @@ const defaultOptions = {
  * @param {boolean} [options.pitchWithRotate=true] If `false`, the map's pitch (tilt) control with "drag to rotate" interaction will be disabled.
  * @param {number} [options.clickTolerance=3] The max number of pixels a user can shift the mouse pointer during a click for it to be considered a valid click (as opposed to a mouse drag).
  * @param {boolean} [options.attributionControl=true] If `true`, an {@link AttributionControl} will be added to the map.
- * @param {string | Array<string>} [options.customAttribution] String or strings to show in an {@link AttributionControl}. Only applicable if `options.attributionControls` is `true`.
+ * @param {string | Array<string>} [options.customAttribution] String or strings to show in an {@link AttributionControl}. Only applicable if `options.attributionControl` is `true`.
  * @param {string} [options.logoPosition='bottom-left'] A string representing the position of the Mapbox wordmark on the map. Valid options are `top-left`,`top-right`, `bottom-left`, `bottom-right`.
  * @param {boolean} [options.failIfMajorPerformanceCaveat=false] If `true`, map creation will fail if the performance of Mapbox
  *   GL JS would be dramatically worse than expected (i.e. a software renderer would be used).
@@ -1349,10 +1349,10 @@ class Map extends Camera {
     /**
      * Sets the state of a feature. The `state` object is merged in with the existing state of the feature.
      *
-     * @param {Object} [feature] Feature identifier. Feature objects returned from
+     * @param {Object} feature Feature identifier. Feature objects returned from
      * {@link Map#queryRenderedFeatures} or event handlers can be used as feature identifiers.
-     * @param {string} [feature.id] Unique id of the feature.
-     * @param {string} [feature.source] The Id of the vector source or GeoJSON source for the feature.
+     * @param {string | number} feature.id Unique id of the feature.
+     * @param {string} feature.source The Id of the vector source or GeoJSON source for the feature.
      * @param {string} [feature.sourceLayer] (optional)  *For vector tile sources, the sourceLayer is
      *  required.*
      * @param {Object} state A set of key-value pairs. The values should be valid JSON types.
@@ -1362,7 +1362,7 @@ class Map extends Camera {
      * option assigns ids based on a feature's index in the source data. If you change feature data using
      * `map.getSource('some id').setData(..)`, you may need to re-apply state taking into account updated `id` values.
      */
-    setFeatureState(feature: { source: string; sourceLayer?: string; id: string; }, state: Object) {
+    setFeatureState(feature: { source: string; sourceLayer?: string; id: string | number; }, state: Object) {
         this.style.setFeatureState(feature, state);
         return this._update();
     }
@@ -1370,16 +1370,16 @@ class Map extends Camera {
     /**
      * Gets the state of a feature.
      *
-     * @param {Object} [feature] Feature identifier. Feature objects returned from
+     * @param {Object} feature Feature identifier. Feature objects returned from
      * {@link Map#queryRenderedFeatures} or event handlers can be used as feature identifiers.
-     * @param {string} [feature.source] The Id of the vector source or GeoJSON source for the feature.
+     * @param {string | number} feature.id Unique id of the feature.
+     * @param {string} feature.source The Id of the vector source or GeoJSON source for the feature.
      * @param {string} [feature.sourceLayer] (optional)  *For vector tile sources, the sourceLayer is
      *  required.*
-     * @param {string} [feature.id] Unique id of the feature.
      *
      * @returns {Object} The state of the feature.
      */
-    getFeatureState(feature: { source: string; sourceLayer?: string; id: string; }): any {
+    getFeatureState(feature: { source: string; sourceLayer?: string; id: string | number; }): any {
         return this.style.getFeatureState(feature);
     }
 
@@ -1426,8 +1426,8 @@ class Map extends Camera {
         let height = 0;
 
         if (this._container) {
-            width = this._container.offsetWidth || 400;
-            height = this._container.offsetHeight || 300;
+            width = this._container.clientWidth || 400;
+            height = this._container.clientHeight || 300;
         }
 
         return [width, height];
