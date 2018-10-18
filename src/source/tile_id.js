@@ -166,13 +166,13 @@ function getQuadkey(z, x, y) {
     return quadkey;
 }
 
-function getBBox4490(z, x, y) {
+function getBBox4490(x, y, z) {
     const scale = 360 / Math.pow(2, z);
 
     const minX = x * scale - 180;
-    const minY = 90 - y * scale;
+    const minY = 90 - (y + 1) * scale;
     const maxX = (x + 1) * scale - 180;
-    const maxY = 90 - (y + 1) * scale;
+    const maxY = 90 - y * scale;
 
     return [minX, minY, maxX, maxY].join(',');
 }
