@@ -596,8 +596,9 @@ class Painter {
         }
     }
 
-    renderLayer(painter: Painter, sourceCache?: SourceCache, layer: StyleLayer, coords?: Array<OverscaledTileID>) {
+    renderLayer(painter: Painter, sourceCache?: SourceCache, layer: StyleLayer, coords?: Array<OverscaledTileID>, ignoreSymbol?: boolean) {
         if (layer.isHidden(this.transform.zoom)) return;
+        if (layer.type === 'symbol' && ignoreSymbol) return;
         if (layer.type !== 'background' && layer.type !== 'sky' && layer.type !== 'custom' && !(coords && coords.length)) return;
         this.id = layer.id;
 

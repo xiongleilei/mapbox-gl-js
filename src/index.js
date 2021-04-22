@@ -29,6 +29,7 @@ import {WorkerPerformanceUtils} from './util/worker_performance_utils';
 import {PerformanceUtils} from './util/performance';
 import {FreeCameraOptions} from './ui/free_camera';
 import browser from './util/browser';
+import BasicRenderer from './basic/renderer';
 
 const exported = {
     version,
@@ -51,6 +52,7 @@ const exported = {
     FreeCameraOptions,
     Evented,
     config,
+    BasicRenderer,
     /**
      * Initializes resources like WebWorkers that can be shared across maps to lower load
      * times in some situations. `mapboxgl.workerUrl` and `mapboxgl.workerCount`, if being
