@@ -7,7 +7,7 @@
   "license": "SEE LICENSE IN LICENSE.txt",
   "repository": {
     "type": "git",
-    "url": "git://github.com/cgcs2000/mapbox-gl-js.git"
+    "url": "git@github.com:xiongleilei/mapbox-gl-js.git"
   },
   "engines": {
     "node": ">=6.4.0"
