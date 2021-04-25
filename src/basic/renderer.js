@@ -231,6 +231,7 @@ class BasicRenderer extends Camera {
     }
     this.painter._filterForZoom = zoom;
     this.setZoom(zoom);
+    this._style.update(new EvaluationParameters(zoom));
     this._cancelAllPendingRenders();
     return;
   }
@@ -244,7 +245,7 @@ class BasicRenderer extends Camera {
         }
         if (styleLayer.type === 'symbol'){
             let fts = this._style.querySourceFeatures(styleLayer.source, {sourceLayer: styleLayer.sourceLayer, filter: ["all",  ["!=", "name", ""]]});
-            let hash = {}; 
+            let hash = {};
             const newFts = fts.reduceRight((item, next) => {
                 hash[next.properties.name] ? '' : hash[next.properties.name] = true && item.push(next);
                 return item
