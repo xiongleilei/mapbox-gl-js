@@ -244,7 +244,7 @@ class BasicRenderer extends Camera {
             continue;
         }
         if (styleLayer.type === 'symbol'){
-            let fts = this._style.querySourceFeatures(styleLayer.source, {sourceLayer: styleLayer.sourceLayer, filter: ["all",  ["!=", "name", ""]]});
+            let fts = this._style.querySourceFeatures(styleLayer.source, {sourceLayer: styleLayer.sourceLayer, filter: styleLayer.filter});
             let hash = {};
             const newFts = fts.reduceRight((item, next) => {
                 hash[next.properties.name] ? '' : hash[next.properties.name] = true && item.push(next);
